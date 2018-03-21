@@ -35,16 +35,13 @@ class Player extends Human{
     constructor(color="purple", rect={left:0, top:0, width:25, height:25}, x=0, y=0){
         super(color, rect, x, y, PLAYER_SPEED);
     }
-
-    move(mousex, mousey){
-        move(mouseX=0, mouseY=0, keyVect={x:1, y:1}){
+    move(mouseX=0, mouseY=0, keyVect={x:1, y:1}){
             let norm = normalize(mouseX, mouseY, this.x, this.y);
             norm.vectX *= keyVect.x;
             norm.vectY *= keyVect.y;
             this.x += norm.vectX;
             this.y += norm.vectY;
             console.log("X: " + norm.vectX + " Y: " + norm.vectY);
-        }
     }
 }
 
