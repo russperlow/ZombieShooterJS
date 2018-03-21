@@ -21,6 +21,7 @@ let bullets = [];
 let mouseX = 0;
 let mouseY = 0;
 let zombieSpawnTimer = 0;
+let paused = false;
 
 function init(){
     map = mapInitialization();
@@ -43,6 +44,9 @@ document.addEventListener('keydown', function(event){
         case 'KeyS':
             player.move(mouseX, mouseY, {x:-1, y:-1});
             break;
+        case 'KeyP':
+            paused = !paused;
+            break;
     }
 });
 
@@ -59,6 +63,13 @@ document.addEventListener('mousemove', function(event){
 function loop(){
     requestAnimationFrame(loop);
 
+    if(!paused){
+        gamePlayingLoop();
+    }
+    
+}
+
+function gamePlayingLoop(){
     if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
         let zx = Math.random() * screenWidth;
         let zy = Math.random() * screenHeight;

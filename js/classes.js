@@ -89,6 +89,6 @@ function createZombie(color="red", rect={left:0, top:0, width:25, height:25}, x=
 
 function createBullet(color="black", x=0, y=0, mouseX, mouseY, rect={left:0, top:0, width:5, height:5}){
     let norm = normalize(mouseX, mouseY, x, y);
-    let bullet = new Bullet(color, rect, x, y, {x:fwdX, y:fwdY});
+    let bullet = new Bullet(color, rect, x, y, {x:norm.fwdX, y:norm.fwdY});
     return bullet;
 }
