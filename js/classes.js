@@ -19,9 +19,6 @@ class Human{
         let dx = targetX - this.x;
         let dy = targetY - this.y;
         let rotation = Math.atan2(dy, dx);
-
-        // console.log("TargetX: " + targetX + " TargetY: " + targetY + "\nThis.X: " + this.x + " This.Y: " + this.y + "\nDX: " + dx + " DY: " + dy);
-
         ctx.fillStyle = this.color;
         ctx.save();
         ctx.translate(this.x, this.y);
@@ -35,13 +32,13 @@ class Player extends Human{
     constructor(color="purple", rect={left:0, top:0, width:25, height:25}, x=0, y=0){
         super(color, rect, x, y, PLAYER_SPEED);
     }
+
     move(mouseX=0, mouseY=0, keyVect={x:1, y:1}){
-            let norm = normalize(mouseX, mouseY, this.x, this.y);
-            norm.vectX *= keyVect.x;
-            norm.vectY *= keyVect.y;
-            this.x += norm.vectX;
-            this.y += norm.vectY;
-            console.log("X: " + norm.vectX + " Y: " + norm.vectY);
+        let norm = normalize(mouseX, mouseY, this.x, this.y);
+        norm.fwdX *= keyVect.x;
+        norm.fwdY *= keyVect.y;
+        this.x += norm.fwdX;
+        this.y += norm.fwdY;
     }
 }
 
@@ -51,9 +48,11 @@ class Zombie extends Human{
     }
 
     move(playerX, playerY){
+        let moveX = playerX - this.x;
+        let moveY = playerY - this.y;
         let norm = normalize(playerX, playerY, this.x, this.y);
-        this.x += moveX / norm.length * this.speed;
-        this.y += moveY / norm.length * this.speed;
+        this.x += norm.fwdX * this.speed;
+        this.y += norm.fwdY * this.speed;
     }
 }
 

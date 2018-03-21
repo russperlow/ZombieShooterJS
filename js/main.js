@@ -32,13 +32,13 @@ function init(){
 document.addEventListener('keydown', function(event){
     switch(event.code){
         case 'KeyA':
-            player.move(mouseX, mouseY, {x:1, y:1});
+            player.move(mouseX, mouseY, {x:1, y:-1});
             break;
         case 'KeyD':
             player.move(mouseX, mouseY, {x:-1, y:1});
             break;
         case 'KeyW':
-            player.move(mouseX, mouseY, {x:1, y:-1});
+            player.move(mouseX, mouseY, {x:1, y:1});
             break;
         case 'KeyS':
             player.move(mouseX, mouseY, {x:-1, y:-1});
