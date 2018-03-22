@@ -8,12 +8,12 @@ function generateSeed(){
     return Math.random() * (51197) % 20;
 }
 
-function mapInitialization(rows = 100, columns = 100){
+function mapInitialization(startX = 0, startY = 0, rows = 100, columns = 100){
     let map = [];
     console.log("UPDATED");
-    for(let i = 0; i < rows; i++){
+    for(let i = startX; i < rows; i++){
         map[i] = [];
-        for(let j = 0; j < columns; j++){
+        for(let j = startY; j < columns; j++){
             let x = (i - 1 * seed % 256 + i * seed % 256 + i + 1 * seed % 256) / 3;
             let y = (j - 1 * seed % 256 + j * seed % 256 + j + 1 * seed % 256) / 3;
             let noise = perlinNoise(x, y, 0);

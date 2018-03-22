@@ -37,8 +37,8 @@ class Player extends Human{
         let norm = normalize(mouseX, mouseY, this.x, this.y);
         norm.fwdX *= keyVect.x;
         norm.fwdY *= keyVect.y;
-        this.x += norm.fwdX;
-        this.y += norm.fwdY;
+        this.x += norm.fwdX * this.speed;
+        this.y += norm.fwdY * this.speed;
     }
 }
 

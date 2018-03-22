@@ -31,7 +31,7 @@ function init(){
     
     canvas.width = screenWidth = window.innerWidth;// * 0.8;
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
-    map = mapInitialization(screenWidth / 10, screenHeight / 10);
+    map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
 
     player = createPlayer("purple", rect, 500, 500);
     
@@ -61,15 +61,19 @@ document.addEventListener('keydown', function(event){
     // console.log(event.code);
     switch(event.code){
         case 'KeyA':
+            if(!paused)
             player.move(mouseX, mouseY, {x:1, y:-1});
             break;
         case 'KeyD':
+        if(!paused)
             player.move(mouseX, mouseY, {x:-1, y:1});
             break;
         case 'KeyW':
+        if(!paused)
             player.move(mouseX, mouseY, {x:1, y:1});
             break;
         case 'KeyS':
+        if(!paused)
             player.move(mouseX, mouseY, {x:-1, y:-1});
             break;
         case 'Escape':
@@ -218,5 +222,19 @@ function collisionCheck(){
             gamePlaying = false;
             gameOver = true;
         }
+    }
+
+    // Check the map situation
+    if(player.x < player.rect.width){
+        player.x = player.rect.width;
+    }
+    else if(player.x > screenWidth - player.rect.width * 2){
+        player.x = screenWidth - player.rect.width * 2;
+    }
+    if(player.y < player.rect.height){
+        player.y = player.rect.height;
+    }
+    else if(player.y > screenHeight - player.rect.height * 2){
+        player.y = screenHeight - player.rect.height * 2;
     }
 }
