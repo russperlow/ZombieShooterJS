@@ -73,7 +73,11 @@ class Bullet{
 
     draw(ctx){
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.rect.width, this.rect.height);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.rect.width / 2, 0, Math.PI * 2, false);
+        ctx.closePath();
+        ctx.fill();
+        // ctx.fillRect(this.x, this.y, this.rect.width, this.rect.height);
     }
 }
 

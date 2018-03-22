@@ -5,11 +5,11 @@ export {init, PLAYER_SPEED, ZOMBIE_SPEED, BULLET_SPEED};
 
 const canvas = document.querySelector("canvas"); 
 const ctx = canvas.getContext("2d");
-let screenWidth = 1000;
-let screenHeight = 1000;
+let screenWidth = 900;
+let screenHeight = 900;
 const PLAYER_SPEED = 2;
 const ZOMBIE_SPEED = 2;
-const BULLET_SPEED = 2.5;
+const BULLET_SPEED = 5;
 const ZOMBIE_SPAWN_SPEED = 0.5;
 const ZOMBIE_COLOR = "red";
 
@@ -28,16 +28,22 @@ function init(){
     score = 0;
     zombies = [];
     bullets = [];
-    map = mapInitialization();
+    
+    canvas.width = screenWidth = window.innerWidth;// * 0.8;
+    canvas.height = screenHeight = window.innerHeight;// * 0.8;
+    map = mapInitialization(screenWidth / 10, screenHeight / 10);
+
     player = createPlayer("blue", rect, 500, 500);
+    
     let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0);
     zombies = zombies.concat(zombie);
+    
     ctx.fillStyle = 'green';
     ctx.fillRect(0, 0, screenWidth, screenHeight);
-    // loop();
 }
 
 window.onload = window.onresize = function(){
+    console.log("ON LOAD");
     canvas.width = screenWidth = window.innerWidth;// * 0.8;
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
 
@@ -84,7 +90,7 @@ document.addEventListener('keydown', function(event){
             else if(gameOver){
                 gameOver = false;
                 gamePlaying = true;
-                document.querySelector("#gameOver").style.display = "inline";
+                document.querySelector("#gameOver").style.display = "none";
                 init();
                 loop();
             }
@@ -106,7 +112,11 @@ function loop(){
     requestAnimationFrame(loop);
 
     if(gamePlaying && !paused){
-        gamePlayingLoop();
+        gamePlayingUpdate();
+        gamePlayingDraw();
+    }
+    else if(paused){
+        gamePlayingDraw();
     }
     else if(gameOver){
         document.querySelector("#gameOver").style.display = "inline";
@@ -114,7 +124,7 @@ function loop(){
     }
 }
 
-function gamePlayingLoop(){
+function gamePlayingUpdate(){
     if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
         let zx = Math.random() * screenWidth;
         let zy = Math.random() * screenHeight;
@@ -131,6 +141,32 @@ function gamePlayingLoop(){
     }
 
     // Clear Screen
+    // ctx.clearRect(0, 0, screenWidth, screenHeight);
+
+    // Draw map/background
+    // drawMap(ctx, map);    
+    
+    // Draw bullets
+    for(let i = 0; i < bullets.length; i++){
+        bullets[i].move();
+        // bullets[i].draw(ctx);
+    }
+
+    // Draw zombies
+    for(let i = 0; i < zombies.length; i++){
+        zombies[i].move(player.x, player.y);
+        // zombies[i].draw(ctx, player.x, player.y);
+    }
+
+    // Check collision among zombies, bullets and player
+    collisionCheck();
+
+    // Lastly, draw player
+    // player.draw(ctx, mouseX, mouseY);
+}
+
+function gamePlayingDraw(){
+    // Clear Screen
     ctx.clearRect(0, 0, screenWidth, screenHeight);
 
     // Draw map/background
@@ -138,13 +174,13 @@ function gamePlayingLoop(){
     
     // Draw bullets
     for(let i = 0; i < bullets.length; i++){
-        bullets[i].move();
+        // bullets[i].move();
         bullets[i].draw(ctx);
     }
 
     // Draw zombies
     for(let i = 0; i < zombies.length; i++){
-        zombies[i].move(player.x, player.y);
+        // zombies[i].move(player.x, player.y);
         zombies[i].draw(ctx, player.x, player.y);
     }
 
