@@ -15,17 +15,21 @@ const ZOMBIE_COLOR = "red";
 
 let map = [];
 let rect = {left:0, top:0, width:25, height:25};
-let player = createPlayer("blue", rect, 500, 500);
-let zombies = [];
+let player;
 let bullets = [];
+let zombies = [];
 let mouseX = 0;
 let mouseY = 0;
 let zombieSpawnTimer = 0;
-let mainMenu = true, paused = false;
-let score = 0;
+let mainMenu = true, gamePlaying = false, paused = false, gameOver = false;
+let score;
 
 function init(){
+    score = 0;
+    zombies = [];
+    bullets = [];
     map = mapInitialization();
+    player = createPlayer("blue", rect, 500, 500);
     let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0);
     zombies = zombies.concat(zombie);
     ctx.fillStyle = 'green';
@@ -72,8 +76,16 @@ document.addEventListener('keydown', function(event){
         case 'Enter':
             if(mainMenu){
                 mainMenu = false;
+                gamePlaying = true;
                 document.querySelector("#mainMenu").style.display = "none";
                 document.querySelector("#score").style.display = "inline";
+                loop();
+            }
+            else if(gameOver){
+                gameOver = false;
+                gamePlaying = true;
+                document.querySelector("#gameOver").style.display = "inline";
+                init();
                 loop();
             }
             break;
@@ -93,8 +105,12 @@ document.addEventListener('mousemove', function(event){
 function loop(){
     requestAnimationFrame(loop);
 
-    if(!paused){
+    if(gamePlaying && !paused){
         gamePlayingLoop();
+    }
+    else if(gameOver){
+        document.querySelector("#gameOver").style.display = "inline";
+        window.cancelAnimationFrame(loop);
     }
 }
 
@@ -168,6 +184,19 @@ function collisionCheck(){
                 document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;
             }
+        }
+    }
+
+    // Check if zombies collide with player
+    for(let i = 0; i < zombies.length; i++){
+        let zombie = zombies[i];
+        if(player.x < zombie.x + zombie.rect.width && 
+            player.x + player.rect.width > zombie.x &&
+            player.y < zombie.y + zombie.rect.height &&
+            player.y + player.rect.height > zombie.y
+        ){
+            gamePlaying = false;
+            gameOver = true;
         }
     }
 }
