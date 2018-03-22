@@ -33,17 +33,17 @@ function init(){
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
     map = mapInitialization(screenWidth / 10, screenHeight / 10);
 
-    player = createPlayer("blue", rect, 500, 500);
+    player = createPlayer("purple", rect, 500, 500);
     
     let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0);
     zombies = zombies.concat(zombie);
     
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = "green";
     ctx.fillRect(0, 0, screenWidth, screenHeight);
 }
 
 window.onload = window.onresize = function(){
-    console.log("ON LOAD");
+    // console.log("ON LOAD");
     canvas.width = screenWidth = window.innerWidth;// * 0.8;
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
 
@@ -58,7 +58,7 @@ window.onload = window.onresize = function(){
 }
 
 document.addEventListener('keydown', function(event){
-    console.log(event.code);
+    // console.log(event.code);
     switch(event.code){
         case 'KeyA':
             player.move(mouseX, mouseY, {x:1, y:-1});
@@ -134,35 +134,24 @@ function gamePlayingUpdate(){
         let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy);
         zombies.push(zombie);
         zombieSpawnTimer = 0;
-        console.log("Zombie Created");
+        // console.log("Zombie Created");
     }
     else{
         zombieSpawnTimer += 0.01;
     }
 
-    // Clear Screen
-    // ctx.clearRect(0, 0, screenWidth, screenHeight);
-
-    // Draw map/background
-    // drawMap(ctx, map);    
-    
-    // Draw bullets
+    // Move bullets
     for(let i = 0; i < bullets.length; i++){
         bullets[i].move();
-        // bullets[i].draw(ctx);
     }
 
-    // Draw zombies
+    // Move zombies
     for(let i = 0; i < zombies.length; i++){
         zombies[i].move(player.x, player.y);
-        // zombies[i].draw(ctx, player.x, player.y);
     }
 
     // Check collision among zombies, bullets and player
     collisionCheck();
-
-    // Lastly, draw player
-    // player.draw(ctx, mouseX, mouseY);
 }
 
 function gamePlayingDraw(){
@@ -174,18 +163,13 @@ function gamePlayingDraw(){
     
     // Draw bullets
     for(let i = 0; i < bullets.length; i++){
-        // bullets[i].move();
         bullets[i].draw(ctx);
     }
 
     // Draw zombies
     for(let i = 0; i < zombies.length; i++){
-        // zombies[i].move(player.x, player.y);
         zombies[i].draw(ctx, player.x, player.y);
     }
-
-    // Check collision among zombies, bullets and player
-    collisionCheck();
 
     // Lastly, draw player
     player.draw(ctx, mouseX, mouseY);
@@ -215,7 +199,7 @@ function collisionCheck(){
                 bullet.y + bullet.rect.height > zombie.y
             ){
                 zombies.splice(j, 1);
-                console.log("DELETED ZOMBIE");
+                // console.log("DELETED ZOMBIE");
                 j--;
                 document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;

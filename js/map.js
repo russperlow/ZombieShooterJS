@@ -2,6 +2,7 @@ import {perlinNoise} from './perlinNoise.js';
 export {mapInitialization, drawMap};
 
 const seed = generateSeed();
+const tileSize = 25;
 
 function generateSeed(){
     return Math.random() * (51197) % 20;
@@ -13,12 +14,15 @@ function mapInitialization(rows = 100, columns = 100){
     for(let i = 0; i < rows; i++){
         map[i] = [];
         for(let j = 0; j < columns; j++){
-            let noise = perlinNoise(i, j, 0);//getSeededPosition(i, j);
+            let x = (i - 1 * seed % 256 + i * seed % 256 + i + 1 * seed % 256) / 3;
+            let y = (j - 1 * seed % 256 + j * seed % 256 + j + 1 * seed % 256) / 3;
+            let noise = perlinNoise(x, y, 0);
+            // let noise = perlinNoise(i * seed % 256, j * seed % 256, 0);//getSeededPosition(i, j);
             // console.log("Noise: " + noise);
-            if(noise < 0.5){
+            if(noise < 0.1){
                 map[i][j] = 0;
             }
-            else if(noise < 0.6){
+            else if(noise < 0.4){
                 map[i][j] = 1;
             }
             else{
@@ -49,17 +53,17 @@ function drawMap(ctx, map){
         for(let y = 0; y < map[x].length; y++){
             switch(map[x][y]){
                 case 0:
-                    color = 'red';
+                    color = 'rgba(112, 128, 144, 1)'; // Stone
                     break;
                 case 1:
-                    color = 'green';
+                    color = 'rgba(87, 59, 12, 1)'; // Dirt
                     break;
                 case 2:
-                    color = 'blue';
+                    color = 'rgba(11, 102, 35, 1)'; // Grass
                     break;
             }
             ctx.fillStyle = color;
-            ctx.fillRect(x * 10, y * 10, 10, 10);
+            ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
         }
     }
 }
