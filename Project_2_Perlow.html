@@ -6,13 +6,44 @@
 			margin: 0px;
 			padding: 0px;
 		}
+		#mainMenu{
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin:auto;
+			text-align: center;
+		}
+		h2{
+			margin-top: 5%;
+		}
+		ul{
+			margin-top:0;
+			display:inline-block;
+		}
+		#canvas{
+			position: absolute;
+		}
 	</style>
 	<meta charset="utf-8" />
 	<title>Perlow Project 2</title>
 </head>
 <body>
-<canvas width="1000" height="1000"></canvas>
-	<!-- <script src="js/init.js" type="module"></script> -->
+	<div id="canvas">
+		<canvas width="1000" height="1000"></canvas>
+	</div>
+	<div id="mainMenu">
+		<h1>Welcome to Russ' Zombie Shooter</h1>
+		<h2>Controls:</h2>
+		<ul>
+			<li>WASD to move</li>
+			<li>P to pause</li>
+			<li>Left Click to Shoot</li>
+			<li>Move mouse to rotate direction</li>
+			<li>Enter to begin playing</li>
+		</ul>
+	</div>
 	<script src="dist/bundle.js"></script>
 </body>
 </html>

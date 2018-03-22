@@ -5,8 +5,8 @@ export {init, PLAYER_SPEED, ZOMBIE_SPEED, BULLET_SPEED};
 
 const canvas = document.querySelector("canvas"); 
 const ctx = canvas.getContext("2d");
-const screenWidth = 1000;
-const screenHeight = 1000;
+let screenWidth = 1000;
+let screenHeight = 1000;
 const PLAYER_SPEED = 2;
 const ZOMBIE_SPEED = 2;
 const BULLET_SPEED = 2.5;
@@ -16,18 +16,34 @@ const ZOMBIE_COLOR = "red";
 let map = [];
 let rect = {left:0, top:0, width:25, height:25};
 let player = createPlayer("blue", rect, 500, 500);
-let zombies = []; //createZombie("red", rect, 0, 0);
+let zombies = [];
 let bullets = [];
 let mouseX = 0;
 let mouseY = 0;
 let zombieSpawnTimer = 0;
-let paused = false;
+let mainMenu = true, paused = false;
 
 function init(){
     map = mapInitialization();
     let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0);
     zombies = zombies.concat(zombie);
-    loop();
+    ctx.fillStyle = 'green';
+    ctx.fillRect(0, 0, screenWidth, screenHeight);
+    // loop();
+}
+
+window.onload = window.onresize = function(){
+    canvas.width = screenWidth = window.innerWidth;// * 0.8;
+    canvas.height = screenHeight = window.innerHeight;// * 0.8;
+
+    // Main menu - draw background, game playing - pause the game
+    if(mainMenu){
+        ctx.fillStyle = 'green';
+        ctx.fillRect(0, 0, screenWidth, screenHeight);
+    }
+    else if(!paused){
+        paused = true;
+    }
 }
 
 document.addEventListener('keydown', function(event){
@@ -46,6 +62,13 @@ document.addEventListener('keydown', function(event){
             break;
         case 'KeyP':
             paused = !paused;
+            break;
+        case 'Enter':
+            if(mainMenu){
+                mainMenu = false;
+                document.querySelector("#mainMenu").style.display = "none";
+                loop();
+            }
             break;
     }
 });
@@ -66,7 +89,6 @@ function loop(){
     if(!paused){
         gamePlayingLoop();
     }
-    
 }
 
 function gamePlayingLoop(){
