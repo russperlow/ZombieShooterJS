@@ -15,6 +15,16 @@
 			margin:auto;
 			text-align: center;
 		}
+		#pausedMenu{
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin:auto;
+			text-align: center;
+			display: none;
+		}
 		h2{
 			margin-top: 5%;
 		}
@@ -24,6 +34,16 @@
 		}
 		#canvas{
 			position: absolute;
+		} 
+		#score{
+			display: none;
+			position: absolute;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
 		}
 	</style>
 	<meta charset="utf-8" />
@@ -31,6 +51,7 @@
 </head>
 <body>
 	<div id="canvas">
+		<h3 id="score">Score: 0</h3>
 		<canvas width="1000" height="1000"></canvas>
 	</div>
 	<div id="mainMenu">
@@ -38,7 +59,18 @@
 		<h2>Controls:</h2>
 		<ul>
 			<li>WASD to move</li>
-			<li>P to pause</li>
+			<li>Esc to pause/unpause</li>
+			<li>Left Click to Shoot</li>
+			<li>Move mouse to rotate direction</li>
+			<li>Enter to begin playing</li>
+		</ul>
+	</div>
+	<div id="pausedMenu">
+		<h1>Paused</h1>
+		<h2>Controls:</h2>
+		<ul>
+			<li>WASD to move</li>
+			<li>Esc to pause/unpause</li>
 			<li>Left Click to Shoot</li>
 			<li>Move mouse to rotate direction</li>
 			<li>Enter to begin playing</li>

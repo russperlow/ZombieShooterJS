@@ -22,6 +22,7 @@ let mouseX = 0;
 let mouseY = 0;
 let zombieSpawnTimer = 0;
 let mainMenu = true, paused = false;
+let score = 0;
 
 function init(){
     map = mapInitialization();
@@ -47,6 +48,7 @@ window.onload = window.onresize = function(){
 }
 
 document.addEventListener('keydown', function(event){
+    console.log(event.code);
     switch(event.code){
         case 'KeyA':
             player.move(mouseX, mouseY, {x:1, y:-1});
@@ -60,13 +62,18 @@ document.addEventListener('keydown', function(event){
         case 'KeyS':
             player.move(mouseX, mouseY, {x:-1, y:-1});
             break;
-        case 'KeyP':
+        case 'Escape':
             paused = !paused;
+            if(!paused)
+                document.querySelector("#pausedMenu").style.display = "none";
+            else
+                document.querySelector("#pausedMenu").style.display = "inline";
             break;
         case 'Enter':
             if(mainMenu){
                 mainMenu = false;
                 document.querySelector("#mainMenu").style.display = "none";
+                document.querySelector("#score").style.display = "inline";
                 loop();
             }
             break;
@@ -158,6 +165,7 @@ function collisionCheck(){
                 zombies.splice(j, 1);
                 console.log("DELETED ZOMBIE");
                 j--;
+                document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;
             }
         }
