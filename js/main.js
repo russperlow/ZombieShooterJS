@@ -8,9 +8,9 @@ const ctx = canvas.getContext("2d");
 let screenWidth = 900;
 let screenHeight = 900;
 const PLAYER_SPEED = 4;
-const ZOMBIE_SPEED = 1;
+const ZOMBIE_SPEED = 2;
 const BULLET_SPEED = 5;
-const ZOMBIE_SPAWN_SPEED = 5;//0.5;
+const ZOMBIE_SPAWN_SPEED = 0.5;
 const ZOMBIE_COLOR = "red";
 
 let map = [];
@@ -35,13 +35,13 @@ function init(){
     mapMoveY = 0;
     zombieSpawnTimer = 0;
     
-    canvas.width = screenWidth = window.innerWidth;// * 0.8;
-    canvas.height = screenHeight = window.innerHeight;// * 0.8;
+    canvas.width = screenWidth = window.innerWidth;
+    canvas.height = screenHeight = window.innerHeight;
     map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
 
-    player = createPlayer("purple", rect, 500, 500);
+    player = createPlayer("purple", rect, canvas.width / 2, canvas.height / 2, PLAYER_SPEED);
     
-    let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0);
+    let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0, ZOMBIE_SPEED);
     zombies = zombies.concat(zombie);
     
     ctx.fillStyle = "green";
@@ -49,8 +49,8 @@ function init(){
 }
 
 window.onload = window.onresize = function(){
-    canvas.width = screenWidth = window.innerWidth;// * 0.8;
-    canvas.height = screenHeight = window.innerHeight;// * 0.8;
+    canvas.width = screenWidth = window.innerWidth;
+    canvas.height = screenHeight = window.innerHeight;
 
     // Main menu - draw background, game playing - pause the game
     if(mainMenu){
@@ -134,20 +134,19 @@ function loop(){
 }
 
 function gamePlayingUpdate(){
-    // if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
-    //     let zx = Math.random() * screenWidth;
-    //     let zy = Math.random() * screenHeight;
-    //     zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * mapMoveX + screenWidth / 2;
-    //     zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * mapMoveY + screenWidth / 2;
+    if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
+        let zx = Math.random() * screenWidth;
+        let zy = Math.random() * screenHeight;
+        zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * (mapMoveX + 1) + screenWidth / 2;
+        zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * (mapMoveY + 1) + screenWidth / 2;
 
-    //     let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy);
-    //     zombies.push(zombie);
-    //     zombieSpawnTimer = 0;
-    //     // console.log("Zombie Created");
-    // }
-    // else{
-    //     zombieSpawnTimer += 0.01;
-    // }
+        let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy, ZOMBIE_SPEED);
+        zombies.push(zombie);
+        zombieSpawnTimer = 0;
+    }
+    else{
+        zombieSpawnTimer += 0.01;
+    }
 
     // Move bullets
     for(let i = 0; i < bullets.length; i++){
@@ -194,7 +193,6 @@ function collisionCheck(){
         if(bullet.x < 0 || bullet.x > screenWidth || bullet.y < 0 || bullet.y > screenHeight){
             let index = bullets.indexOf(bullet);
             bullets.splice(i, 1);
-            console.log("DELETED BULLET");
             i--;
             continue;
         }
@@ -208,7 +206,6 @@ function collisionCheck(){
                 bullet.y + bullet.rect.height > zombie.y
             ){
                 zombies.splice(j, 1);
-                // console.log("DELETED ZOMBIE");
                 j--;
                 document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;
@@ -233,7 +230,7 @@ function collisionCheck(){
     if(player.x < player.rect.width){
         player.x = player.rect.width;    
         mapMoveX--;
-        map = updateMapX(map, false, mapMoveX)    
+        map = updateMapX(map, false, mapMoveX); 
     }
     else if(player.x > screenWidth - player.rect.width * 2){
         player.x = screenWidth - player.rect.width * 2;

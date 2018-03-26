@@ -56,7 +56,6 @@ function getSeededPosition(x = 0, y = 0){
 
 function updateMapX(map, movePositive, xChange){
     if(movePositive){
-        console.log("X change positive");
         for(let i = 0; i < map.length; i++){
             for(let j = 0; j < map[j].length; j++){
                 if(i == map.length - 1){
@@ -78,7 +77,6 @@ function updateMapX(map, movePositive, xChange){
         }
     }
     else{
-        console.log("X change negative");
         for(let i = map.length - 1; i >= 0; i--){
             for(let j = 0; j < map[j].length; j++){
                 if(i == 0){
@@ -94,7 +92,6 @@ function updateMapX(map, movePositive, xChange){
                     }
                 }
                 else{
-                    // console.log("i: " + i + " j: " + j);
                     map[i][j] = map[i-1][j];
                 }
             }
@@ -126,7 +123,6 @@ function updateMapY(map, movePositive, yChange){
         }
     }
     else{
-        console.log("Y change negative");
         for(let i = 0; i < map.length; i++){
             for(let j = map[i].length - 1; j >= 0; j--){
                 if(j == 0){
