@@ -150,19 +150,26 @@ function drawMap(ctx, map){
     let color = 'red';
     for(let x = 0; x < map.length; x++){
         for(let y = 0; y < map[x].length; y++){
+            let url = "grass";
             switch(map[x][y]){
                 case 0:
                     color = 'rgba(0, 123, 153, 1)'; // Water
+                    url = "Water";
                     break;
                 case 1:
                     color = 'rgba(11, 102, 35, 1)'; // Grass
+                    url = "Grass";
                     break;
                 case 2:
                     color = 'rgba(112, 128, 144, 1)'; // Stone
+                    url = "Stone";
                     break;
             }
             ctx.fillStyle = color;
-            ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+            let image = new Image();
+            image.src = "images/" + url + ".png";
+            ctx.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+            // ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
         }
     }
 }

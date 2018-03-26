@@ -3,8 +3,9 @@ import {normalize} from './utilities.js';
 export {createPlayer, createZombie, createBullet};
 
 class Human{
-    constructor(color="red", rect={left:0, top:0, width:25, height:25}, x=0, y=0, speed=1){
+    constructor(color="red", rect={left:0, top:0, width:25, height:25}, x=0, y=0, speed=1, image){
         this.color = color;
+        this.image = image;
         this.rect = rect;
         this.x = x;
         this.y = y;
@@ -23,14 +24,17 @@ class Human{
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(rotation);
-        ctx.fillRect(-this.rect.width / 2, -this.rect.height / 2, this.rect.width, this.rect.height);
+        ctx.drawImage(this.image, -this.rect.width / 2, -this.rect.height / 2, this.rect.width, this.rect.height);
+        // ctx.fillRect(-this.rect.width / 2, -this.rect.height / 2, this.rect.width, this.rect.height);
         ctx.restore();
     }
 }
 
 class Player extends Human{
     constructor(color="purple", rect={left:0, top:0, width:25, height:25}, x=0, y=0){
-        super(color, rect, x, y, PLAYER_SPEED);
+        let image = new Image();
+        image.src = "images/Player.png";
+        super(color, rect, x, y, PLAYER_SPEED, image);
     }
 
     move(mouseX=0, mouseY=0, keyVect={x:1, y:1}){
@@ -44,7 +48,9 @@ class Player extends Human{
 
 class Zombie extends Human{
     constructor(color="red", rect={left:0, top:0, width:25, height:25}, x=0, y=0){
-        super(color, rect, x, y, ZOMBIE_SPEED);
+        let image = new Image();
+        image.src = "images/Zombie.png";
+        super(color, rect, x, y, ZOMBIE_SPEED, image);
     }
 
     move(playerX, playerY){
