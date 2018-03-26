@@ -1,5 +1,5 @@
 import {perlinNoise} from './perlinNoise.js';
-export {mapInitialization, updateMap, drawMap};
+export {mapInitialization, updateMapX, updateMapY, drawMap};
 
 const seed = 5.393906695411715;// generateSeed();
 const tileSize = 25;
@@ -54,13 +54,13 @@ function getSeededPosition(x = 0, y = 0){
     return pos;
 }
 
-function updateMap(map, xChange, yChange){
-    if(xChange > 0){
+function updateMapX(map, movePositive, xChange){
+    if(movePositive){
         console.log("X change positive");
         for(let i = 0; i < map.length; i++){
             for(let j = 0; j < map[j].length; j++){
-                if(i == map[i].length - 1){
-                    let noise = Math.abs(perlinNoise((i + xChange * 2 * j * 3) * seed % 256));
+                if(i == map.length - 1){
+                    let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
                     if(noise < 0.05){
                         map[i][j] = 0;
                     }
@@ -77,12 +77,12 @@ function updateMap(map, xChange, yChange){
             }
         }
     }
-    else if(xChange < 0){
+    else{
         console.log("X change negative");
-        for(let i = map.length; i > 0; i--){
+        for(let i = map.length - 1; i >= 0; i--){
             for(let j = 0; j < map[j].length; j++){
                 if(i == 0){
-                    let noise = Math.abs(perlinNoise((i + xChange * 2 * j * 3) * seed % 256));
+                    let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
                     if(noise < 0.05){
                         map[i][j] = 0;
                     }
@@ -94,18 +94,21 @@ function updateMap(map, xChange, yChange){
                     }
                 }
                 else{
+                    // console.log("i: " + i + " j: " + j);
                     map[i][j] = map[i-1][j];
                 }
             }
         }
     }
+    return map;
+}
 
-    if(yChange > 0){
-        console.log("Y change positive");
+function updateMapY(map, movePositive, yChange){
+    if(movePositive){
         for(let i = 0; i < map.length; i++){
             for(let j = 0; j < map[j].length; j++){
                 if(j == map[j].length - 1){
-                    let noise = Math.abs(perlinNoise((i * 2 * j + yChange * 3) * seed % 256));
+                    let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
                     if(noise < 0.05){
                         map[i][j] = 0;
                     }
@@ -122,12 +125,12 @@ function updateMap(map, xChange, yChange){
             }
         }
     }
-    else if(yChange < 0){
+    else{
         console.log("Y change negative");
         for(let i = 0; i < map.length; i++){
-            for(let j = map[j].length - 1; j > 0; j--){
+            for(let j = map[i].length - 1; j >= 0; j--){
                 if(j == 0){
-                    let noise = Math.abs(perlinNoise((i * 2 * j + yChange * 3) * seed % 256));
+                    let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
                     if(noise < 0.05){
                         map[i][j] = 0;
                     }
@@ -144,7 +147,6 @@ function updateMap(map, xChange, yChange){
             }
         }
     }
-
     return map;
 }
 

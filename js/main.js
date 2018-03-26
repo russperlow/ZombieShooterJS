@@ -1,4 +1,4 @@
-import {mapInitialization, updateMap, drawMap} from './map.js';
+import {mapInitialization, updateMapX, updateMapY, drawMap} from './map.js';
 import {createPlayer, createZombie, createBullet} from './classes.js'
 
 export {init, PLAYER_SPEED, ZOMBIE_SPEED, BULLET_SPEED};
@@ -20,15 +20,20 @@ let bullets = [];
 let zombies = [];
 let mouseX = 0;
 let mouseY = 0;
-let zombieSpawnTimer = 0;
+let zombieSpawnTimer;
 let mainMenu = true, gamePlaying = false, paused = false, gameOver = false;
 let score;
-let mapMoveX = 0, mapMoveY = 0;
+let mapMoveX, mapMoveY; // Used as offsets for when the map moves
 
 function init(){
+
+    // Init all changed variables for first and every new game
     score = 0;
     zombies = [];
     bullets = [];
+    mapMoveX = 0;
+    mapMoveY = 0;
+    zombieSpawnTimer = 0;
     
     canvas.width = screenWidth = window.innerWidth;// * 0.8;
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
@@ -44,7 +49,6 @@ function init(){
 }
 
 window.onload = window.onresize = function(){
-    // console.log("ON LOAD");
     canvas.width = screenWidth = window.innerWidth;// * 0.8;
     canvas.height = screenHeight = window.innerHeight;// * 0.8;
 
@@ -61,30 +65,30 @@ window.onload = window.onresize = function(){
 document.addEventListener('keydown', function(event){
     // console.log(event.code);
     switch(event.code){
-        case 'KeyA':
+        case 'KeyA': // Move left
             if(!paused)
-            player.move(mouseX, mouseY, {x:1, y:-1});
+                player.move(mouseX, mouseY, {x:1, y:-1});
             break;
-        case 'KeyD':
-        if(!paused)
-            player.move(mouseX, mouseY, {x:-1, y:1});
+        case 'KeyD': // Move right
+            if(!paused)
+                player.move(mouseX, mouseY, {x:-1, y:1});
             break;
-        case 'KeyW':
-        if(!paused)
-            player.move(mouseX, mouseY, {x:1, y:1});
+        case 'KeyW': // Move up
+            if(!paused)
+                player.move(mouseX, mouseY, {x:1, y:1});
             break;
-        case 'KeyS':
-        if(!paused)
-            player.move(mouseX, mouseY, {x:-1, y:-1});
+        case 'KeyS': // Move down
+            if(!paused)
+                player.move(mouseX, mouseY, {x:-1, y:-1});
             break;
-        case 'Escape':
+        case 'Escape': // Pause game
             paused = !paused;
             if(!paused)
                 document.querySelector("#pausedMenu").style.display = "none";
             else
                 document.querySelector("#pausedMenu").style.display = "inline";
             break;
-        case 'Enter':
+        case 'Enter': // Start game / restart game
             if(mainMenu){
                 mainMenu = false;
                 gamePlaying = true;
@@ -130,20 +134,20 @@ function loop(){
 }
 
 function gamePlayingUpdate(){
-    if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
-        let zx = Math.random() * screenWidth;
-        let zy = Math.random() * screenHeight;
-        zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * mapMoveX + screenWidth / 2;
-        zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * mapMoveY + screenWidth / 2;
+    // if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
+    //     let zx = Math.random() * screenWidth;
+    //     let zy = Math.random() * screenHeight;
+    //     zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * mapMoveX + screenWidth / 2;
+    //     zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * mapMoveY + screenWidth / 2;
 
-        let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy);
-        zombies.push(zombie);
-        zombieSpawnTimer = 0;
-        // console.log("Zombie Created");
-    }
-    else{
-        zombieSpawnTimer += 0.01;
-    }
+    //     let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy);
+    //     zombies.push(zombie);
+    //     zombieSpawnTimer = 0;
+    //     // console.log("Zombie Created");
+    // }
+    // else{
+    //     zombieSpawnTimer += 0.01;
+    // }
 
     // Move bullets
     for(let i = 0; i < bullets.length; i++){
@@ -225,25 +229,27 @@ function collisionCheck(){
         }
     }
 
-    // Check the map situation
+    // Check if the map needs to move side to side
     if(player.x < player.rect.width){
         player.x = player.rect.width;    
         mapMoveX--;
-        map = updateMap(map, mapMoveX, 0)    
+        map = updateMapX(map, false, mapMoveX)    
     }
     else if(player.x > screenWidth - player.rect.width * 2){
         player.x = screenWidth - player.rect.width * 2;
         mapMoveX++;
-        map = updateMap(map, mapMoveX, 0);
+        map = updateMapX(map, true, mapMoveX);
     }
+
+    // Check if the map needs to move up/down
     if(player.y < player.rect.height){
         player.y = player.rect.height;
         mapMoveY--;
-        map = updateMap(map, 0, mapMoveY);
+        map = updateMapY(map, false, mapMoveY)    
     }
     else if(player.y > screenHeight - player.rect.height * 2){
         player.y = screenHeight - player.rect.height * 2;
         mapMoveY++;
-        map = updateMap(map, 0, mapMoveY);
+        map = updateMapY(map, true, mapMoveY);
     }
 }

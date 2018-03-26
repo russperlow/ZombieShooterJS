@@ -47,11 +47,11 @@ function perlinNoise(x = 0, y = 0, z = 0){
     let u = fade(xf);
     let v = fade(yf);
     let w = fade(zf);
-    console.log("------------------------------------------------");
-    console.log("(x, y, z) (" + x + "," + y + "," + z + ")");
-    console.log("(xi, yi, zi) (" + xi + "," + yi + "," + zi + ")");
-    console.log("(xf, yf, zf) (" + xf + "," + yf + "," + zf + ")");
-    console.log("(xr, yr, zr) (" + Math.round(x) + "," + Math.round(y) + "," + Math.round(z) + ")");
+    // console.log("------------------------------------------------");
+    // console.log("(x, y, z) (" + x + "," + y + "," + z + ")");
+    // console.log("(xi, yi, zi) (" + xi + "," + yi + "," + zi + ")");
+    // console.log("(xf, yf, zf) (" + xf + "," + yf + "," + zf + ")");
+    // console.log("(xr, yr, zr) (" + Math.round(x) + "," + Math.round(y) + "," + Math.round(z) + ")");
 
 
     // Perlin's hash function
