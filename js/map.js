@@ -26,15 +26,20 @@ function mapInitialization(startX = 0, startY = 0, rows = 100, columns = 100){
             // let noise = perlinNoise(x, y, 0);
             // let noise = perlinNoise(i * seed % 256, j * seed % 256, 0);//getSeededPosition(i, j);
             // console.log("Noise: " + noise);
+            let image = new Image();
             if(noise < 0.05){
-                map[i][j] = 0;
+                image.src = "images/Water.png";
+                // map[i][j] = 0;
             }
             else if(noise < 0.95){
-                map[i][j] = 1;
+                image.src = "images/Grass.png";
+                // map[i][j] = 1;
             }
             else{
-                map[i][j] = 2;
+                image.src = "images/Stone.png";
+                // map[i][j] = 2;
             }
+            map[i][j] = image;
             // console.log("Map[" + i + "][" + j + "] = " + map[i][j]); 
         }
     }
@@ -60,15 +65,20 @@ function updateMapX(map, movePositive, xChange){
             for(let j = 0; j < map[j].length; j++){
                 if(i == map.length - 1){
                     let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
+                    let image = new Image();
                     if(noise < 0.05){
-                        map[i][j] = 0;
+                        image.src = "images/Water.png";
+                        // map[i][j] = 0;
                     }
                     else if(noise < 0.95){
-                        map[i][j] = 1;
+                        image.src = "images/Grass.png";
+                        // map[i][j] = 1;
                     }
                     else{
-                        map[i][j] = 2;
+                        image.src = "images/Stone.png";
+                        // map[i][j] = 2;
                     }
+                    map[i][j] = image;
                 }
                 else{
                     map[i][j] = map[i+1][j];
@@ -81,14 +91,18 @@ function updateMapX(map, movePositive, xChange){
             for(let j = 0; j < map[j].length; j++){
                 if(i == 0){
                     let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
+                    let image = new Image();
                     if(noise < 0.05){
-                        map[i][j] = 0;
+                        image.src = "images/Water.png";
+                        // map[i][j] = 0;
                     }
                     else if(noise < 0.95){
-                        map[i][j] = 1;
+                        image.src = "images/Grass.png";
+                        // map[i][j] = 1;
                     }
                     else{
-                        map[i][j] = 2;
+                        image.src = "images/Stone.png";
+                        // map[i][j] = 2;
                     }
                 }
                 else{
@@ -106,14 +120,18 @@ function updateMapY(map, movePositive, yChange){
             for(let j = 0; j < map[j].length; j++){
                 if(j == map[j].length - 1){
                     let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
+                    let image = new Image();
                     if(noise < 0.05){
-                        map[i][j] = 0;
+                        image.src = "images/Water.png";
+                        // map[i][j] = 0;
                     }
                     else if(noise < 0.95){
-                        map[i][j] = 1;
+                        image.src = "images/Grass.png";
+                        // map[i][j] = 1;
                     }
                     else{
-                        map[i][j] = 2;
+                        image.src = "images/Stone.png";
+                        // map[i][j] = 2;
                     }
                 }
                 else{
@@ -127,14 +145,18 @@ function updateMapY(map, movePositive, yChange){
             for(let j = map[i].length - 1; j >= 0; j--){
                 if(j == 0){
                     let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
+                    let image = new Image();
                     if(noise < 0.05){
-                        map[i][j] = 0;
+                        image.src = "images/Water.png";
+                        // map[i][j] = 0;
                     }
                     else if(noise < 0.95){
-                        map[i][j] = 1;
+                        image.src = "images/Grass.png";
+                        // map[i][j] = 1;
                     }
                     else{
-                        map[i][j] = 2;
+                        image.src = "images/Stone.png";
+                        // map[i][j] = 2;
                     }
                 }
                 else{
@@ -150,25 +172,25 @@ function drawMap(ctx, map){
     let color = 'red';
     for(let x = 0; x < map.length; x++){
         for(let y = 0; y < map[x].length; y++){
-            let url = "grass";
-            switch(map[x][y]){
-                case 0:
-                    color = 'rgba(0, 123, 153, 1)'; // Water
-                    url = "Water";
-                    break;
-                case 1:
-                    color = 'rgba(11, 102, 35, 1)'; // Grass
-                    url = "Grass";
-                    break;
-                case 2:
-                    color = 'rgba(112, 128, 144, 1)'; // Stone
-                    url = "Stone";
-                    break;
-            }
-            ctx.fillStyle = color;
-            let image = new Image();
-            image.src = "images/" + url + ".png";
-            ctx.drawImage(image, x * tileSize, y * tileSize, tileSize, tileSize);
+            // let url = "grass";
+            // switch(map[x][y]){
+            //     case 0:
+            //         color = 'rgba(0, 123, 153, 1)'; // Water
+            //         url = "Water";
+            //         break;
+            //     case 1:
+            //         color = 'rgba(11, 102, 35, 1)'; // Grass
+            //         url = "Grass";
+            //         break;
+            //     case 2:
+            //         color = 'rgba(112, 128, 144, 1)'; // Stone
+            //         url = "Stone";
+            //         break;
+            // }
+            // ctx.fillStyle = color;
+            // let image = new Image();
+            // image.src = "images/" + url + ".png";
+            ctx.drawImage(map[x][y], x * tileSize, y * tileSize, tileSize, tileSize);
             // ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
         }
     }
