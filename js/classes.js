@@ -25,7 +25,6 @@ class Human{
         ctx.translate(this.x, this.y);
         ctx.rotate(rotation);
         ctx.drawImage(this.image, -this.rect.width / 2, -this.rect.height / 2, this.rect.width, this.rect.height);
-        // ctx.fillRect(-this.rect.width / 2, -this.rect.height / 2, this.rect.width, this.rect.height);
         ctx.restore();
     }
 }
@@ -35,6 +34,8 @@ class Player extends Human{
         let image = new Image();
         image.src = "images/Player.png";
         super(color, rect, x, y, PLAYER_SPEED, image);
+        this.shotCount = 12;
+        this.shotsTaken = 0;
     }
 
     move(mouseX=0, mouseY=0, keyVect={x:1, y:1}){
@@ -83,7 +84,6 @@ class Bullet{
         ctx.arc(this.x, this.y, this.rect.width / 2, 0, Math.PI * 2, false);
         ctx.closePath();
         ctx.fill();
-        // ctx.fillRect(this.x, this.y, this.rect.width, this.rect.height);
     }
 }
 

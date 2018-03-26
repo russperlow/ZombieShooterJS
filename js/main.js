@@ -14,16 +14,17 @@ const ZOMBIE_SPAWN_SPEED = 0.5;
 const ZOMBIE_COLOR = "red";
 
 let map = [];
-let rect = {left:0, top:0, width:25, height:25};
-let player;
 let bullets = [];
 let zombies = [];
+let rect = {left:0, top:0, width:25, height:25};
+let player;
 let mouseX = 0;
 let mouseY = 0;
 let zombieSpawnTimer;
-let mainMenu = true, gamePlaying = false, paused = false, gameOver = false;
+let mainMenu = true, gamePlaying = false, paused = false, gameOver = false; // Booleans for game states
 let score;
 let mapMoveX, mapMoveY; // Used as offsets for when the map moves
+let requestId = 0;
 
 function init(){
 
@@ -33,16 +34,13 @@ function init(){
     bullets = [];
     mapMoveX = 0;
     mapMoveY = 0;
-    zombieSpawnTimer = 0;
+    zombieSpawnTimer = 0; 
     
     canvas.width = screenWidth = window.innerWidth;
     canvas.height = screenHeight = window.innerHeight;
     map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
 
     player = createPlayer("purple", rect, canvas.width / 2, canvas.height / 2, PLAYER_SPEED);
-    
-    let zombie = createZombie(ZOMBIE_COLOR, rect, 0, 0, ZOMBIE_SPEED);
-    zombies = zombies.concat(zombie);
     
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, screenWidth, screenHeight);
@@ -63,7 +61,6 @@ window.onload = window.onresize = function(){
 }
 
 document.addEventListener('keydown', function(event){
-    // console.log(event.code);
     switch(event.code){
         case 'KeyA': // Move left
             if(!paused)
@@ -81,19 +78,24 @@ document.addEventListener('keydown', function(event){
             if(!paused)
                 player.move(mouseX, mouseY, {x:-1, y:-1});
             break;
+        case 'KeyR': // Reload
+            player.shotsTaken = 0;
+            break;
         case 'Escape': // Pause game
-            paused = !paused;
-            if(!paused)
-                document.querySelector("#pausedMenu").style.display = "none";
-            else
-                document.querySelector("#pausedMenu").style.display = "inline";
+            if(gamePlaying || paused){
+                paused = !paused;
+                if(!paused)
+                    document.querySelector("#pausedMenu").style.display = "none";
+                else
+                    document.querySelector("#pausedMenu").style.display = "inline";
+            }
             break;
         case 'Enter': // Start game / restart game
             if(mainMenu){
                 mainMenu = false;
                 gamePlaying = true;
                 document.querySelector("#mainMenu").style.display = "none";
-                document.querySelector("#score").style.display = "inline";
+                // document.querySelector("#score").style.display = "inline";
                 loop();
             }
             else if(gameOver){
@@ -108,8 +110,12 @@ document.addEventListener('keydown', function(event){
 });
 
 document.addEventListener('click', function(event){
-    var bullet = createBullet("black", player.x, player.y, mouseX, mouseY, {left:0, top:0, width:5, height:5});
-    bullets = bullets.concat(bullet);
+    // Only create bullets when game is playing
+    if(gamePlaying && player.shotCount > player.shotsTaken){
+        var bullet = createBullet("black", player.x, player.y, mouseX, mouseY, {left:0, top:0, width:5, height:5});
+        bullets = bullets.concat(bullet);
+        player.shotsTaken++;
+    }
 });
 
 document.addEventListener('mousemove', function(event){
@@ -118,18 +124,16 @@ document.addEventListener('mousemove', function(event){
 });
 
 function loop(){
-    requestAnimationFrame(loop);
+    requestId = requestAnimationFrame(loop);
 
     if(gamePlaying && !paused){
         gamePlayingUpdate();
         gamePlayingDraw();
     }
-    else if(paused){
-        gamePlayingDraw();
-    }
     else if(gameOver){
         document.querySelector("#gameOver").style.display = "inline";
-        window.cancelAnimationFrame(loop);
+        document.querySelector("#finalScore").textContent = "Final Score: " + score;
+        window.cancelAnimationFrame(requestId);
     }
 }
 
@@ -179,6 +183,28 @@ function gamePlayingDraw(){
         zombies[i].draw(ctx, player.x, player.y);
     }
 
+    // Draw the remaining shots the player has
+    if(player.shotCount - player.shotsTaken > 0){
+        ctx.fillStyle = 'black';
+        ctx.font = '25px Arial';
+        ctx.fillText("Bullets: ", 25, 75);
+        for(let i = 0; i < player.shotCount - player.shotsTaken; i++){
+            ctx.beginPath();
+            ctx.arc((i + 5) * 25, 67, 5, 0, Math.PI * 2, false);
+            ctx.closePath();
+            ctx.fill();
+        }
+    }
+    else{
+        ctx.fillStyle = 'red';
+        ctx.font = 'bold 25px Arial';
+        ctx.fillText("Press 'R' to Reload!!", 25, 75);
+    }
+
+    ctx.fillStyle = 'black';
+    ctx.font = '25px Arial';
+    ctx.fillText('Score: ' + score, 25, 25);
+
     // Lastly, draw player
     player.draw(ctx, mouseX, mouseY);
 }
@@ -207,7 +233,8 @@ function collisionCheck(){
             ){
                 zombies.splice(j, 1);
                 j--;
-                document.querySelector("#score").textContent = "Score: " + (++score);
+                score++;
+                // document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;
             }
         }
