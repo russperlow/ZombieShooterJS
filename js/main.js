@@ -1,4 +1,4 @@
-import {mapInitialization, drawMap} from './map.js';
+import {mapInitialization, updateMap, drawMap} from './map.js';
 import {createPlayer, createZombie, createBullet} from './classes.js'
 
 export {init, PLAYER_SPEED, ZOMBIE_SPEED, BULLET_SPEED};
@@ -7,10 +7,10 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 let screenWidth = 900;
 let screenHeight = 900;
-const PLAYER_SPEED = 2;
-const ZOMBIE_SPEED = 2;
+const PLAYER_SPEED = 4;
+const ZOMBIE_SPEED = 1;
 const BULLET_SPEED = 5;
-const ZOMBIE_SPAWN_SPEED = 0.5;
+const ZOMBIE_SPAWN_SPEED = 5;//0.5;
 const ZOMBIE_COLOR = "red";
 
 let map = [];
@@ -23,6 +23,7 @@ let mouseY = 0;
 let zombieSpawnTimer = 0;
 let mainMenu = true, gamePlaying = false, paused = false, gameOver = false;
 let score;
+let mapMoveX = 0, mapMoveY = 0;
 
 function init(){
     score = 0;
@@ -132,8 +133,8 @@ function gamePlayingUpdate(){
     if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
         let zx = Math.random() * screenWidth;
         let zy = Math.random() * screenHeight;
-        zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx + screenWidth / 2;
-        zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy + screenWidth / 2;
+        zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * mapMoveX + screenWidth / 2;
+        zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * mapMoveY + screenWidth / 2;
 
         let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy);
         zombies.push(zombie);
@@ -226,15 +227,23 @@ function collisionCheck(){
 
     // Check the map situation
     if(player.x < player.rect.width){
-        player.x = player.rect.width;
+        player.x = player.rect.width;    
+        mapMoveX--;
+        map = updateMap(map, mapMoveX, 0)    
     }
     else if(player.x > screenWidth - player.rect.width * 2){
         player.x = screenWidth - player.rect.width * 2;
+        mapMoveX++;
+        map = updateMap(map, mapMoveX, 0);
     }
     if(player.y < player.rect.height){
         player.y = player.rect.height;
+        mapMoveY--;
+        map = updateMap(map, 0, mapMoveY);
     }
     else if(player.y > screenHeight - player.rect.height * 2){
         player.y = screenHeight - player.rect.height * 2;
+        mapMoveY++;
+        map = updateMap(map, 0, mapMoveY);
     }
 }
