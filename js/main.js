@@ -42,8 +42,9 @@ function init(){
 
     player = createPlayer("purple", rect, canvas.width / 2, canvas.height / 2, PLAYER_SPEED);
     
-    ctx.fillStyle = "green";
-    ctx.fillRect(0, 0, screenWidth, screenHeight);
+    // ctx.fillStyle = "green";
+    // ctx.fillRect(0, 0, screenWidth, screenHeight);
+    drawMap(ctx, map);
 }
 
 window.onload = window.onresize = function(){
@@ -52,8 +53,10 @@ window.onload = window.onresize = function(){
 
     // Main menu - draw background, game playing - pause the game
     if(mainMenu){
-        ctx.fillStyle = 'green';
-        ctx.fillRect(0, 0, screenWidth, screenHeight);
+        // ctx.fillStyle = 'green';
+        // ctx.fillRect(0, 0, screenWidth, screenHeight);
+        map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
+        drawMap(ctx, map);
     }
     else if(!paused){
         paused = true;
@@ -232,6 +235,8 @@ function collisionCheck(){
                 bullet.y + bullet.rect.height > zombie.y
             ){
                 zombies.splice(j, 1);
+                bullets.splice(i, 1);
+                i--;
                 j--;
                 score++;
                 // document.querySelector("#score").textContent = "Score: " + (++score);

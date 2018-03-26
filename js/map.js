@@ -1,7 +1,7 @@
 import {perlinNoise} from './perlinNoise.js';
 export {mapInitialization, updateMapX, updateMapY, drawMap};
 
-const seed = 5.393906695411715;// generateSeed();
+const seed = generateSeed();
 const tileSize = 25;
 
 function generateSeed(){
@@ -19,14 +19,14 @@ function mapInitialization(startX = 0, startY = 0, rows = 100, columns = 100){
             let n = (i * 2 * j * 3) * seed % 256;
             let noise = Math.abs(perlinNoise(n));
             let image = new Image();
-            if(noise < 0.05){
+            if(noise <= 0.15){
                 image.src = "images/Water.png";
             }
-            else if(noise < 0.95){
-                image.src = "images/Grass.png";
+            else if(noise >= 0.85 && noise < 1){
+                image.src = "images/Stone.png";
             }
             else{
-                image.src = "images/Stone.png";
+                image.src = "images/Grass.png";
             }
             map[i][j] = image;
         }
