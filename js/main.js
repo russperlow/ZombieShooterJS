@@ -141,19 +141,19 @@ function loop(){
 }
 
 function gamePlayingUpdate(){
-    // if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
-    //     let zx = Math.random() * screenWidth;
-    //     let zy = Math.random() * screenHeight;
-    //     zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * (mapMoveX + 1) + screenWidth / 2;
-    //     zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * (mapMoveY + 1) + screenWidth / 2;
+    if(zombieSpawnTimer >= ZOMBIE_SPAWN_SPEED){
+        let zx = Math.random() * screenWidth;
+        let zy = Math.random() * screenHeight;
+        zx = zx < screenWidth / 2 ? zx - screenWidth / 2 : zx * (mapMoveX + 1) + screenWidth / 2;
+        zy = zy < screenHeight / 2 ? zy - screenWidth / 2 : zy * (mapMoveY + 1) + screenWidth / 2;
 
-    //     let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy, ZOMBIE_SPEED);
-    //     zombies.push(zombie);
-    //     zombieSpawnTimer = 0;
-    // }
-    // else{
-    //     zombieSpawnTimer += 0.01;
-    // }
+        let zombie = createZombie(ZOMBIE_COLOR, rect, zx, zy, ZOMBIE_SPEED);
+        zombies.push(zombie);
+        zombieSpawnTimer = 0;
+    }
+    else{
+        zombieSpawnTimer += 0.01;
+    }
 
     // Move bullets
     for(let i = 0; i < bullets.length; i++){
