@@ -53,14 +53,14 @@ function updateMapX(map, movePositive, xChange){
                 if(i == map.length - 1){
                     let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
                     let image = new Image();
-                    if(noise < 0.05){
+                    if(noise <= 0.15){
                         image.src = "images/Water.png";
                     }
-                    else if(noise < 0.95){
-                        image.src = "images/Grass.png";
+                    else if(noise >= 0.85 && noise < 1){
+                        image.src = "images/Stone.png";
                     }
                     else{
-                        image.src = "images/Stone.png";
+                        image.src = "images/Grass.png";
                     }
                     map[i][j] = image;
                 }
@@ -76,15 +76,16 @@ function updateMapX(map, movePositive, xChange){
                 if(i == 0){
                     let noise = Math.abs(perlinNoise(((i + xChange) * 2 * j * 3) * seed % 256));
                     let image = new Image();
-                    if(noise < 0.05){
+                    if(noise <= 0.15){
                         image.src = "images/Water.png";
                     }
-                    else if(noise < 0.95){
-                        image.src = "images/Grass.png";
-                    }
-                    else{
+                    else if(noise >= 0.85 && noise < 1){
                         image.src = "images/Stone.png";
                     }
+                    else{
+                        image.src = "images/Grass.png";
+                    }
+                    map[i][j] = image;
                 }
                 else{
                     map[i][j] = map[i-1][j];
@@ -99,18 +100,19 @@ function updateMapY(map, movePositive, yChange){
     if(movePositive){
         for(let i = 0; i < map.length; i++){
             for(let j = 0; j < map[j].length; j++){
-                if(j == map[j].length - 1){
+                if(j == map[i].length - 1){
                     let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
                     let image = new Image();
-                    if(noise < 0.05){
+                    if(noise <= 0.15){
                         image.src = "images/Water.png";
                     }
-                    else if(noise < 0.95){
-                        image.src = "images/Grass.png";
-                    }
-                    else{
+                    else if(noise >= 0.85 && noise < 1){
                         image.src = "images/Stone.png";
                     }
+                    else{
+                        image.src = "images/Grass.png";
+                    }
+                    map[i][j] = image;
                 }
                 else{
                     map[i][j] = map[i][j+1];
@@ -124,15 +126,16 @@ function updateMapY(map, movePositive, yChange){
                 if(j == 0){
                     let noise = Math.abs(perlinNoise((i * 2 * (j + yChange) * 3) * seed % 256));
                     let image = new Image();
-                    if(noise < 0.05){
+                    if(noise <= 0.15){
                         image.src = "images/Water.png";
                     }
-                    else if(noise < 0.95){
-                        image.src = "images/Grass.png";
-                    }
-                    else{
+                    else if(noise >= 0.85 && noise < 1){
                         image.src = "images/Stone.png";
                     }
+                    else{
+                        image.src = "images/Grass.png";
+                    }
+                    map[i][j] = image;
                 }
                 else{
                     map[i][j] = map[i][j-1];
