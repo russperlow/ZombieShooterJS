@@ -25,6 +25,7 @@ let mainMenu = true, gamePlaying = false, paused = false, gameOver = false; // B
 let score;
 let mapMoveX, mapMoveY; // Used as offsets for when the map moves
 let requestId = 0;
+let backgroundMusic, bulletSound;
 
 function init(){
 
@@ -35,15 +36,18 @@ function init(){
     mapMoveX = 0;
     mapMoveY = 0;
     zombieSpawnTimer = 0; 
-    
+    backgroundMusic = new Audio('sounds/POL-galactic-chase-short.wav');
+    backgroundMusic.loop = true;
+    backgroundMusic.play();
+    bulletSound = new Audio('sounds/gunshot.mp3');
+    bulletSound.loop = false;
+
     canvas.width = screenWidth = window.innerWidth;
     canvas.height = screenHeight = window.innerHeight;
     map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
 
     player = createPlayer("purple", rect, canvas.width / 2, canvas.height / 2, PLAYER_SPEED);
     
-    // ctx.fillStyle = "green";
-    // ctx.fillRect(0, 0, screenWidth, screenHeight);
     drawMap(ctx, map);
 }
 
@@ -53,8 +57,6 @@ window.onload = window.onresize = function(){
 
     // Main menu - draw background, game playing - pause the game
     if(mainMenu){
-        // ctx.fillStyle = 'green';
-        // ctx.fillRect(0, 0, screenWidth, screenHeight);
         map = mapInitialization(0, 0, screenWidth / 25, screenHeight / 25);
         drawMap(ctx, map);
     }
@@ -98,7 +100,6 @@ document.addEventListener('keydown', function(event){
                 mainMenu = false;
                 gamePlaying = true;
                 document.querySelector("#mainMenu").style.display = "none";
-                // document.querySelector("#score").style.display = "inline";
                 loop();
             }
             else if(gameOver){
@@ -118,6 +119,10 @@ document.addEventListener('click', function(event){
         var bullet = createBullet("black", player.x, player.y, mouseX, mouseY, {left:0, top:0, width:5, height:5});
         bullets = bullets.concat(bullet);
         player.shotsTaken++;
+        if(bulletSound.paused)
+            bulletSound.play();
+        else
+            bulletSound.currentTime = 0;
     }
 });
 
@@ -239,7 +244,6 @@ function collisionCheck(){
                 i--;
                 j--;
                 score++;
-                // document.querySelector("#score").textContent = "Score: " + (++score);
                 continue;
             }
         }
